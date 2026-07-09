@@ -1,0 +1,19 @@
+# Flask and Python ignore rules
+cat << 'EOF' > .gitignore
+# Environments
+__pycache__/
+venv/
+env/
+ENV/
+*.pyc
+
+# Database files
+*.db
+*.sqlite
+
+# Logs
+*.log
+
+# Flask instance folder
+instance/
+EOF
