@@ -207,6 +207,7 @@ def build_rag_prompt(input_data: str, format_type: str, masking_style: int) -> t
     else:
         task_instruction = (
             "The input is plain text. Identify and mask all PII values inline. "
+            "You MUST preserve the exact structure, layout, and labels of the original text. "
             "Return ONLY the masked text — no explanation, no preamble. "
             "After the masked text, on a new line output: DETECTED_PII_TYPES: <comma-separated list of detected PII type names>"
         )
@@ -236,10 +237,11 @@ TASK:
 {task_instruction}
 
 CRITICAL RULES:
-1. Only mask actual PII VALUES. Preserve all labels, keys, punctuation and non-PII text exactly.
+1. ONLY modify the PII values. You MUST PRESERVE all original text, labels (e.g. 'Name:', 'Email:'), spaces, newlines, and punctuation EXACTLY.
 2. For style 3 (asterisk): match the character count of the original PII value with * characters and wrap in [ ].
 3. If you detect no PII, return the input unchanged and output DETECTED_PII_TYPES: none
-4. Do NOT add commentary, disclaimers, or any text beyond the masked output and DETECTED_PII_TYPES line.
+4. Do NOT output separator lines like ═══════════════════════════════════════════.
+5. Do NOT add commentary, disclaimers, or any text beyond the masked output and DETECTED_PII_TYPES line.
 """
     return prompt, sources
 
@@ -251,6 +253,10 @@ def parse_llm_response(raw_response: str) -> tuple:
     """
     parts = raw_response.strip().split('DETECTED_PII_TYPES:')
     masked_content = parts[0].strip()
+    
+    # Remove any stray prompt separator lines the model might have copied
+    masked_content = masked_content.replace('═══════════════════════════════════════════', '').strip()
+    
     detected_types = []
 
     if len(parts) > 1:
@@ -610,7 +616,6 @@ def generate_text():
 
     input_data   = data.get('input_data', '').strip()
     format_type  = data.get('format_type', 'text').lower()
-    masking_style = int(data.get('masking_style', 1))
     policy_id    = data.get('policy_id')
 
     if not input_data:
@@ -619,8 +624,10 @@ def generate_text():
     if format_type not in ('text', 'json'):
         return jsonify({"error": "Invalid 'format_type'. Must be 'text' or 'json'"}), 400
 
-    # If policy_id provided, inherit masking_style from that policy (§3.5)
-    if policy_id:
+    # Use masking_style from payload if provided, otherwise fallback to policy_id, then default to 1
+    if 'masking_style' in data:
+        masking_style = int(data['masking_style'])
+    elif policy_id:
         with get_db() as conn:
             policy = conn.execute(
                 'SELECT * FROM masking_policies WHERE id = ? AND user_id = ?',
@@ -629,6 +636,8 @@ def generate_text():
         if not policy:
             return jsonify({"error": f"Policy ID {policy_id} not found or not owned by you"}), 404
         masking_style = policy['masking_style']
+    else:
+        masking_style = 1
 
     if masking_style not in (1, 2, 3):
         return jsonify({"error": "Invalid 'masking_style'. Must be 1, 2, or 3"}), 400
