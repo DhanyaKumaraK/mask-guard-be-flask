@@ -1,6 +1,7 @@
 # Mask Guard — PII Data Masking & Protection
 
 A Flask-based REST API that detects and masks Personally Identifiable Information (PII) in plain text and JSON payloads using the Ollama `llama3` model running locally. Built with a RAG (Retrieval-Augmented Generation) workflow, session-based authentication, and configurable per-user masking policies.
+<img width="1330" height="537" alt="{7EB99D0C-6C5D-4DE4-A13F-694F30B2CAEC}" src="https://github.com/user-attachments/assets/bfee84b8-7ba2-463e-844d-48d185f1694f" />
 
 ---
 
