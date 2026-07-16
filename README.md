@@ -3,8 +3,8 @@
 A Flask-based REST API that detects and masks Personally Identifiable Information (PII) in plain text and JSON payloads using the Ollama `llama3` model running locally. Built with a RAG (Retrieval-Augmented Generation) workflow, session-based authentication, and configurable per-user masking policies.
 <img width="1330" height="537" alt="{7EB99D0C-6C5D-4DE4-A13F-694F30B2CAEC}" src="https://github.com/user-attachments/assets/bfee84b8-7ba2-463e-844d-48d185f1694f" />
 introduced test data with copy functionality
-<img width="1366" height="674" alt="{F479514A-03B6-4BE2-B020-455C676B9F51}" src="https://github.com/user-attachments/assets/629f59e7-65a9-4b7d-8d99-94043c61dfa5" />
 <img width="1366" height="682" alt="{3A438DB1-E77F-4378-BD16-E14B70E35EC8}" src="https://github.com/user-attachments/assets/ecacdab8-0f33-418f-bd4e-4e0b2215e445" />
+<img width="1366" height="674" alt="{F479514A-03B6-4BE2-B020-455C676B9F51}" src="https://github.com/user-attachments/assets/629f59e7-65a9-4b7d-8d99-94043c61dfa5" />
 
 
 ---
