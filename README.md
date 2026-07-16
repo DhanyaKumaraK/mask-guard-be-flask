@@ -99,7 +99,7 @@ Flask API
    ├─ 1. Auth check (session)
    │
    ├─ 2. RETRIEVAL — retrieve_pii_context()
-   │      Returns all 9 PII type entries from the internal PII_KNOWLEDGE_BASE
+   │      Returns all 9 PII type entries from the internal PII_KNOWLEDGE_BASE Which is PII_REGISTRY
    │      (each entry has: pii_type, description, examples, masking_guide per style)
    │
    ├─ 3. PROMPT CONSTRUCTION — build_rag_prompt()
